@@ -1,0 +1,45 @@
+﻿<Window x:Class="Rosalind.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Rosalind"
+        mc:Ignorable="d"
+        Title="Rosalind" Height="581.1" Width="1011.2">
+
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="472*"></RowDefinition>
+            <RowDefinition Height="79*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60*"  />
+            <ColumnDefinition Width="130*" />
+            <ColumnDefinition Width="60*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="1" Grid.Row="0">
+            <TextBlock Margin="5,10,5,5" Text="Заголовок"/>
+            <TextBlock Margin="5,5,5,5" Text="Условие для переменной" TextWrapping="Wrap"/>
+            <TextBox Margin="5,0,5,5" Text="Переменная от пользователя"/>
+            <TextBlock Margin="5,10,5,5" Text="Ответ"/>
+            <TextBlock Margin="5,0,5,5" Text="Текст ответа" TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <ListView x:Name="listBox"  Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Margin="10,10,10,10" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Index}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListView>
+
+        <Expander Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Margin="10,10,9.8,10.2" Header="Пояснения">
+            <TextBlock>Текст пояснения</TextBlock>
+        </Expander>
+        
+        <TextBlock Grid.Column="1" Grid.Row="1" Margin="10.4,16,462,43.2" Text="ID" Width="50" Height="20" />
+        <Button Content="Решить" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="86" Height="28" Background ="LightGray"/>
+
+    </Grid>
+</Window>
