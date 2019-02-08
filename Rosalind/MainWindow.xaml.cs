@@ -30,9 +30,20 @@ namespace Rosalind
         {
             InitializeComponent();
 
+            FillingLB(); //Заполнение списка
+
+        }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) //Выбор ячейки
+        {
+            MessageBox.Show(listBox.SelectedItem.ToString()); 
+        }
+
+        private void FillingLB() //Метод для заполнения списка
+        {
             connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-            var artists = new List<Information>();
+            var Info = new List<Information>();
 
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
@@ -45,17 +56,17 @@ namespace Rosalind
                     {
                         dt.Load(reader);
 
-                        artists = dt.AsEnumerable().Select(se => new Information(se.Field<string>("Id"), se.Field<string>("Name")) { Name = se.Field<string>("Id"), Index = se.Field<string>("Name") }).ToList();
+                        Info = dt.AsEnumerable().Select(se => new Information(se.Field<string>("Name"), se.Field<string>("Id")) { Name = se.Field<string>("Id"), Index = se.Field<string>("Name") }).ToList();
                     }
                 }
             }
 
-            listBox.ItemsSource = artists;
+            listBox.ItemsSource = Info;
         }
     }
 }
 
-public class Information
+public class Information //Класс для заполнение коллекции
 {
     private readonly string name;
     private readonly string index;
