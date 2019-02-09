@@ -19,10 +19,10 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="1" Grid.Row="0">
-            <TextBlock Margin="5,10,5,5" Text="Заголовок"/>
-            <TextBlock Margin="5,5,5,5" Text="Условие для переменной" TextWrapping="Wrap"/>
+            <TextBlock x:Name="TB_1" Margin="5,10,5,5" Text="Заголовок"/>
+            <TextBlock x:Name="TB_Condition" Margin="5,5,5,5" Text="Условие: " TextWrapping="Wrap"/>
             <TextBox Margin="5,0,5,5" Text="Переменная от пользователя"/>
-            <TextBlock Margin="5,10,5,5" Text="Ответ"/>
+            <TextBlock Margin="5,10,5,5" Text="Ответ:"/>
             <TextBlock Margin="5,0,5,5" Text="Текст ответа" TextWrapping="Wrap"/>
         </StackPanel>
 
@@ -30,7 +30,7 @@
                   Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" 
                   Margin="10,10,10,10"
                   SelectionChanged="ListBox_SelectionChanged" 
-                  SelectionMode="Extended" >
+                  SelectionMode="Extended">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}" />
@@ -39,7 +39,7 @@
         </ListView>
 
         <Expander Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Margin="10,10,9.8,10.2" Header="Пояснения">
-            <TextBlock>Текст пояснения</TextBlock>
+            <TextBlock x:Name="EXP_text" TextWrapping="Wrap"/>
         </Expander>
         
         <TextBlock x:Name="Tb_id" Grid.Column="1" Grid.Row="1" Margin="10.4,16,462,43.2" Text="ID" Width="50" Height="20" />
