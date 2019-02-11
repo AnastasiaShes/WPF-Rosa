@@ -42,5 +42,6 @@
             <TextBlock x:Name="EXP_text" TextWrapping="Wrap" FontFamily="Constantia" FontSize="14"/>
         </Expander>
         <Button Content="Решить" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="86" Height="28" Background ="#FF257356" FontFamily="Constantia" FontSize="16" BorderBrush="#FF8ECBB4" Foreground="#FFF6F6F6" BorderThickness="1.4" Click="Button_Click"/>
+        <Button Content="Очистить" Grid.Column="1" HorizontalAlignment="Left" Margin="101.4,0,0,10.2" Grid.Row="1" VerticalAlignment="Bottom" Width="86" Height="28" Background ="#FF257356" FontFamily="Constantia" FontSize="16" BorderBrush="#FF8ECBB4" Foreground="#FFF6F6F6" BorderThickness="1.4" Click="Button_Click2"/>
     </Grid>
 </Window>

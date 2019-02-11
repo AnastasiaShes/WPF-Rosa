@@ -71,9 +71,18 @@ namespace Rosalind
             }
             listBox.ItemsSource = Info;
         }
+
         #endregion
 
-
+        private void Button_Click2(object sender, RoutedEventArgs e)
+        {
+           TB_Headline.Text = "Заголовок";
+           TB_Condition.Text = "Условие";
+           TB_Variable.Text = "";
+           TB_Answer.Text = "";
+           EXP_text.Text = "";
+           listBox.SelectedIndex = -1;
+        }
     } 
 
 }
