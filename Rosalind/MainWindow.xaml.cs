@@ -22,18 +22,33 @@ namespace Rosalind
 
         }
 
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) //Выбор ячейки
+        #region Событие при выборе ячейки
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) 
         {
             if (listBox.SelectedItem is Information _info)
             {
-                TB_1.Text = _info.Name;
-                Tb_id.Text = _info.Index;
+                TB_Headline.Text = _info.Name;
                 TB_Condition.Text = "Условие: " +  _info.Condition;
                 EXP_text.Text = _info.Text;
             }            
         }
+        #endregion
 
-        private void FillingLB() //Метод для заполнения списка
+        #region Кнопка "Решить"
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            logic log = new logic();
+
+            if (listBox.SelectedItem is Information _info)
+            {
+                TB_Answer.Text = log.Decision(_info.Index, TB_Variable.Text);
+            }
+
+        }
+        #endregion
+
+        #region Метод для заполнения списка
+        private void FillingLB()
         {
             string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
@@ -56,7 +71,11 @@ namespace Rosalind
             }
             listBox.ItemsSource = Info;
         }
-    }
+        #endregion
+
+
+    } 
+
 }
 
 

@@ -19,11 +19,11 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="1" Grid.Row="0">
-            <TextBlock x:Name="TB_1" Margin="5,10,5,5" Text="Заголовок"/>
-            <TextBlock x:Name="TB_Condition" Margin="5,5,5,5" Text="Условие: " TextWrapping="Wrap"/>
-            <TextBox Margin="5,0,5,5" Text="Переменная от пользователя"/>
-            <TextBlock Margin="5,10,5,5" Text="Ответ:"/>
-            <TextBlock Margin="5,0,5,5" Text="Текст ответа" TextWrapping="Wrap"/>
+            <TextBlock x:Name="TB_Headline" Margin="5,10,5,5" Text="Заголовок" Foreground="#20815D" FontSize="18" FontFamily="Book Antiqua"/>
+            <TextBlock x:Name="TB_Condition" Margin="5,5,5,5" Text="Условие: " TextWrapping="Wrap" FontFamily="Constantia" FontSize="14"/>
+            <TextBox x:Name="TB_Variable" Margin="5,0,5,5" FontFamily="Constantia" FontSize="14" InputLanguageManager.InputLanguage="en-us" MaxLength="1000"/>
+            <TextBlock Margin="5,10,5,5" Text="Ответ:" FontFamily="Book Antiqua" Foreground="#20815D" FontSize="18"/>
+            <TextBlock x:Name="TB_Answer" Margin="5,0,5,5" Text="Текст ответа" TextWrapping="Wrap" FontFamily="Constantia" FontSize="14"/>
         </StackPanel>
 
         <ListView x:Name="listBox" 
@@ -33,17 +33,14 @@
                   SelectionMode="Extended">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Name}" />
+                    <TextBlock Text="{Binding Name}" FontFamily="Constantia" FontSize="14"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListView>
 
-        <Expander Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Margin="10,10,9.8,10.2" Header="Пояснения">
-            <TextBlock x:Name="EXP_text" TextWrapping="Wrap"/>
+        <Expander Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Margin="10,10,9.8,10.2" Header="Пояснения" FontFamily="Constantia" FontSize="14">
+            <TextBlock x:Name="EXP_text" TextWrapping="Wrap" FontFamily="Constantia" FontSize="14"/>
         </Expander>
-        
-        <TextBlock x:Name="Tb_id" Grid.Column="1" Grid.Row="1" Margin="10.4,16,462,43.2" Text="ID" Width="50" Height="20" />
-        <Button Content="Решить" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="86" Height="28" Background ="LightGray"/>
-
+        <Button Content="Решить" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="86" Height="28" Background ="#FF257356" FontFamily="Constantia" FontSize="16" BorderBrush="#FF8ECBB4" Foreground="#FFF6F6F6" BorderThickness="1.4" Click="Button_Click"/>
     </Grid>
 </Window>
