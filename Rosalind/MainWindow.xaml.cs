@@ -74,6 +74,7 @@ namespace Rosalind
 
         #endregion
 
+        #region  Кнопка "Очистить"
         private void Button_Click2(object sender, RoutedEventArgs e)
         {
            TB_Headline.Text = "Заголовок";
@@ -83,7 +84,8 @@ namespace Rosalind
            EXP_text.Text = "";
            listBox.SelectedIndex = -1;
         }
-    } 
+        #endregion
+    }
 
 }
 

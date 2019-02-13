@@ -17,9 +17,9 @@ class logic
         {
             case "DNA ": answer = CountingDNA(variable); //Подсчет нуклеотидов ДНК
                 break;
-            case "REVC": answer = "Решение для " + id + " с параметрами " + variable;
+            case "RNA ": answer = TranscribindDNA(variable); //Перевод ДНК в РНК
                 break;
-            case "RNA ": answer = "Решение для " + id + " с параметрами " + variable;
+            case "REVC": answer = ComplementDNA(variable); //Обратное дополнение строки
                 break;
         }
         return answer;
@@ -28,7 +28,7 @@ class logic
     #region Подсчет нуклеотидов ДНК
     private string CountingDNA(string per)
     {
-        string count = ""; 
+        string message = ""; 
 
         List<char> list = new List<char>(per.ToList());
 
@@ -36,9 +36,9 @@ class logic
         int perC = (from c in list where c == 'C' || c == 'c' select c).Count();
         int perG = (from g in list where g == 'G' || g == 'g' select g).Count();
         int perT = (from t in list where t == 'T' || t == 't' select t).Count();
-        
-        
-        count = "Аденин (А): " + perA.ToString() + "\n" + "Цитозин (С): " + perC.ToString() + "\n" + "Гуанин (G): " + perG.ToString() + "\n" + "Тимин (T): " + perT.ToString() + "\n";
+
+
+        message = "Аденин (А): " + perA.ToString() + "\n" + "Цитозин (С): " + perC.ToString() + "\n" + "Гуанин (G): " + perG.ToString() + "\n" + "Тимин (T): " + perT.ToString() + "\n";
 
         List<char> list2 = new List<char> { 'A', 'a', 'C', 'c', 'G', 'g', 'T', 't'}; 
 
@@ -49,10 +49,108 @@ class logic
         {
             lastPer += n + ", ";
         }
+        if (lastPer != "")
+        {
+            message += "\nЭлементы, которые не учитывались: " + lastPer;
+        }
 
-        count += "\nЭлементы, которые не учитывались: " + lastPer;
+        list.Clear(); list2.Clear();
+        return message;
+    }
+    #endregion
 
-        return count;
+    #region Перевод ДНК в РНК
+    private string TranscribindDNA(string per)
+    {
+        string message;
+
+        List<char> list = new List<char>(per.ToList());
+        List<char> list2 = new List<char>();
+        List<char> list3 = new List<char>();
+
+        message = "ДНК цепь: ";
+        foreach (var u in list)
+        {
+            if (u == 'A' || u == 'C' || u == 'G' || u == 'T' || u == 'a' || u == 'c' || u == 'g' || u == 't')
+            {
+                message += u;
+                list2.Add(u);
+            }
+        }
+
+        message += "\nРНК цепь: ";
+        foreach (var x in list2)
+        {
+            if 
+                (x == 'T')  message += "U";         
+            else if 
+                (x == 't') message += 'u';
+            else
+                message += x;
+        }
+
+
+        var nums = list.Except(list2); //Вычитаем эл-ы из первой коллекции
+
+        string lastPer = "";
+        foreach (char n in nums)
+        {
+            lastPer += n + ", ";
+        }
+        if (lastPer != "")
+        {
+            message += "\n\nЭлементы, которые не учитывались: " + lastPer;
+        }
+
+        list.Clear(); list2.Clear();  //Очищаем коллекции
+        return message;
+    }
+    #endregion
+
+    #region Обратное дополнение строки
+    private string ComplementDNA (string per)
+    {
+        string message = "";
+
+        List<char> list = new List<char>(per.ToList());
+        Stack<char> stackDNA = new Stack<char>();
+
+        string DNA = "";
+        foreach (var u in list)
+        {
+            if (u == 'A' || u == 'C' || u == 'G' || u == 'T' || u == 'a' || u == 'c' || u == 'g' || u == 't')
+            {
+                DNA += u;
+                stackDNA.Push(u);
+            }
+        }
+
+        message += "Цепь ДНК: " + DNA.ToUpper();
+
+        string AND = "";
+        foreach (var c in stackDNA)
+        {
+            if      (c == 'A' || c == 'a') AND += 'T';
+            else if (c == 'C' || c == 'c') AND += 'G';
+            else if (c == 'G' || c == 'g') AND += 'C';
+            else if (c == 'T' || c == 't') AND += 'A';
+
+        }
+
+        message += "\nОбратное дополнение: " + AND;
+
+        var nums = list.Except(stackDNA); //Вычитаем эл-ы из первой коллекции
+
+        string lastPer = "";
+        foreach (char n in nums)
+        {
+            lastPer += n + ", ";
+        }
+        if (lastPer != "")
+        {
+            message += "\n\nЭлементы, которые не учитывались: " + lastPer;
+        }
+        return message;
     }
     #endregion
 }
