@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
+using System.IO;
 
 class logic
 {
@@ -20,6 +21,8 @@ class logic
             case "RNA ": answer = TranscribindDNA(variable); //Перевод ДНК в РНК
                 break;
             case "REVC": answer = ComplementDNA(variable); //Обратное дополнение строки
+                break;
+            case "PROT": answer = TranscribindProtein(variable); //Перевод РНК в Белок
                 break;
         }
         return answer;
@@ -150,6 +153,48 @@ class logic
         {
             message += "\n\nЭлементы, которые не учитывались: " + lastPer;
         }
+        return message;
+    }
+    #endregion
+
+    #region Перевод РНК в Белок
+    private string TranscribindProtein(string per)
+    {
+        per = per.ToUpper();
+        string message = "";
+        string error = "";
+        string variable = "";
+
+        //Все удовлетворающие символы будут храниться в переменной variable
+        foreach (var x in per)
+        {
+            if (x == 'A' || x == 'C' || x == 'G' || x == 'U')
+                variable += x;
+            else
+                error += x + ", ";
+        }
+
+        string table = File.ReadAllText("RNAintoProtein.txt"); //Тут хранится таблица
+
+        //Тут мы делем переменную от пользователя на группы по три символа
+        var PerUser = (variable.ToUpper()).Select((c, index) => new { c, index })
+            .GroupBy(x => x.index / 3)
+            .Select(group => group.Select(elem => elem.c))
+            .Select(chars => new string(chars.ToArray()));
+
+        //Тут поиск
+        foreach (var str in PerUser)
+        {
+            int index = table.IndexOf(str);
+            if (index != -1)               
+                message += table[index + 4];
+            else
+                error += str + ", ";
+        }
+
+        if (error != "")
+            message += "\nЭлементы, которые не учитывались: " + error;
+
         return message;
     }
     #endregion
