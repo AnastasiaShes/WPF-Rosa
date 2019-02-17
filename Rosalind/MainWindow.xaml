@@ -21,9 +21,9 @@
         <StackPanel Grid.Column="1" Grid.Row="0">
             <TextBlock x:Name="TB_Headline" Margin="5,10,5,5" Text="Заголовок" Foreground="#20815D" FontSize="18" FontFamily="Book Antiqua"/>
             <TextBlock x:Name="TB_Condition" Margin="5,5,5,5" Text="Условие: " TextWrapping="Wrap" FontFamily="Constantia" FontSize="14"/>
-            <TextBox x:Name="TB_Variable" Margin="5,0,5,5" FontFamily="Constantia" FontSize="14" InputLanguageManager.InputLanguage="en-us" MaxLength="1000"/>
+            <TextBox x:Name="TB_Variable" Margin="5,0,5,5" FontFamily="Century" FontSize="14" InputLanguageManager.InputLanguage="en-us" MaxLength="1000"/>
             <TextBlock Margin="5,10,5,5" Text="Ответ:" FontFamily="Book Antiqua" Foreground="#20815D" FontSize="18"/>
-            <TextBlock x:Name="TB_Answer" Margin="5,0,5,5" Text="Текст ответа" TextWrapping="Wrap" FontFamily="Constantia" FontSize="14" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+            <TextBlock x:Name="TB_Answer" Margin="5,0,5,5" Text="Текст ответа" TextWrapping="Wrap" FontFamily="Century" FontSize="14" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
         </StackPanel>
 
         <ListView x:Name="listBox" 
@@ -39,9 +39,9 @@
         </ListView>
 
         <Expander Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" Margin="10,10,9.8,10.2" Header="Пояснения" FontFamily="Constantia" FontSize="14">
-            <TextBlock x:Name="EXP_text" TextWrapping="Wrap" FontFamily="Constantia" FontSize="14"/>
+            <TextBlock x:Name="EXP_text" TextWrapping="Wrap" FontFamily="Century" FontSize="14"/>
         </Expander>
         <Button Content="Решить" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="1" VerticalAlignment="Bottom" Width="86" Height="28" Background ="#FF257356" FontFamily="Constantia" FontSize="16" BorderBrush="#FF8ECBB4" Foreground="#FFF6F6F6" BorderThickness="1.4" Click="Button_Click"/>
-        <Button Content="Очистить" Grid.Column="1" HorizontalAlignment="Left" Margin="101.4,0,0,10.2" Grid.Row="1" VerticalAlignment="Bottom" Width="86" Height="28" Background ="#FF257356" FontFamily="Constantia" FontSize="16" BorderBrush="#FF8ECBB4" Foreground="#FFF6F6F6" BorderThickness="1.4" Click="Button_Click"/>
+        <Button Content="Очистить" Grid.Column="1" HorizontalAlignment="Left" Margin="101.4,0,0,10.2" Grid.Row="1" VerticalAlignment="Bottom" Width="86" Height="28" Background ="#FF257356" FontFamily="Constantia" FontSize="16" BorderBrush="#FF8ECBB4" Foreground="#FFF6F6F6" BorderThickness="1.4" Click="Button_Click2"/>
     </Grid>
 </Window>

@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.SqlClient;
 using System.Data;
-using System.Configuration;
 using System.IO;
 
 class logic
 {
     private string answer;
+    private string message = "";
 
     public string Decision(string id, string variable)
     {
@@ -24,14 +21,18 @@ class logic
                 break;
             case "PROT": answer = TranscribindProtein(variable); //Перевод РНК в Белок
                 break;
+            case "GC  ": answer = GCcontent(variable); //% содержание GC
+                break;
+            case "SUBS": answer = MotifDNA(variable); //Нахождение мотива ДНК
+                break;
+                
         }
         return answer;
     }
 
     #region Подсчет нуклеотидов ДНК
     private string CountingDNA(string per)
-    {
-        string message = ""; 
+    {       
 
         List<char> list = new List<char>(per.ToList());
 
@@ -65,11 +66,9 @@ class logic
     #region Перевод ДНК в РНК
     private string TranscribindDNA(string per)
     {
-        string message;
 
         List<char> list = new List<char>(per.ToList());
         List<char> list2 = new List<char>();
-        List<char> list3 = new List<char>();
 
         message = "ДНК цепь: ";
         foreach (var u in list)
@@ -92,7 +91,6 @@ class logic
                 message += x;
         }
 
-
         var nums = list.Except(list2); //Вычитаем эл-ы из первой коллекции
 
         string lastPer = "";
@@ -113,7 +111,6 @@ class logic
     #region Обратное дополнение строки
     private string ComplementDNA (string per)
     {
-        string message = "";
 
         List<char> list = new List<char>(per.ToList());
         Stack<char> stackDNA = new Stack<char>();
@@ -161,7 +158,6 @@ class logic
     private string TranscribindProtein(string per)
     {
         per = per.ToUpper();
-        string message = "";
         string error = "";
         string variable = "";
 
@@ -194,6 +190,93 @@ class logic
 
         if (error != "")
             message += "\nЭлементы, которые не учитывались: " + error;
+
+        return message;
+    }
+    #endregion
+
+    #region % содержание GC
+    private string GCcontent(string per)
+    {
+
+        double countPer = (from x in per.ToUpper() where x == 'A' || x == 'C' || x == 'G' || x == 'T' select x).Count(); //Кол-во всех ДНК эл-ов 
+
+        if (countPer != 0)
+        {
+            double perC = (from c in per.ToUpper() where c == 'C' || c == 'c' select c).Count(); //Кол-во цитозина
+            double perG = (from g in per.ToUpper() where g == 'G' || g == 'g' select g).Count(); //Кол-во гуанина
+
+            double Cuntent = ((perC + perG) / countPer) * 100;
+            Cuntent = Math.Round(Cuntent, 5); //Округление
+
+            message = "Содержание GC = " + Cuntent.ToString() + " %";
+
+            List<char> list = new List<char> { 'A', 'a', 'C', 'c', 'G', 'g', 'T', 't' };
+
+            var nums = per.Except(list); //Вычитаем эл-ы
+
+            string lastPer = "";
+            foreach (var x in nums)
+            {
+                lastPer += x + ", ";
+            }
+
+            if (lastPer != "")
+                message += "\n\nЭлементы, которые не учитывались: " + lastPer;
+        }
+        else
+            message = "Введите строку ДНК";
+        
+        return message;
+    }
+
+    #endregion
+
+    #region Нахождение мотива в ДНК
+    private string MotifDNA (string per)
+    {
+        if (per.IndexOf('(') != -1 && per.IndexOf(')') != -1 && per.IndexOf('(') < per.IndexOf(')')) 
+        {
+            string СlearedStr = "";
+            string Garbage = "";
+            foreach (var x in per.ToUpper())
+            {
+                if (x == 'A' || x == 'C' || x == 'G' || x == 'T' || x == '(' || x == ')')
+                    СlearedStr += x;
+                else
+                    Garbage += x;
+            }
+
+            int endMotif = СlearedStr.IndexOf(')'); //конец очищенной строки
+            СlearedStr = СlearedStr.Remove(endMotif);
+
+            int endDNA = СlearedStr.IndexOf('('); //конец строки ДНК
+            int lenStr = СlearedStr.Length; //Длина всей строки
+            string DNAstr = СlearedStr.Remove(endDNA); //Строка ДНК
+            string MotifStr = СlearedStr.Substring(endDNA + 1, (lenStr - (endDNA + 1))); //Строка мотива
+
+            message += "ДНК: " + DNAstr;
+            message += "\nМотив: " + MotifStr;
+
+            if (DNAstr.IndexOf(MotifStr) != -1)
+            {
+
+                message += "\n\nСовпадение на: ";
+
+                int index = 0;
+                while ((index = DNAstr.IndexOf(MotifStr, index)) != -1)
+                {
+                    message += (index + 1) + ", ";
+                    index += MotifStr.Length;
+                }
+                message = message.Remove(message.Length - 2);
+                message += " позиции ";
+            }
+            else
+                message += "\n\nСовпадений не найдено.";
+        }
+        else
+            message = "Данные не удовлетворяют условию.";
 
         return message;
     }
