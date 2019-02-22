@@ -25,63 +25,83 @@ class logic
                 break;
             case "SUBS": answer = MotifDNA(variable); //Нахождение мотива ДНК
                 break;
-                
+            case "HAMM": answer = CountMutation(variable); //Подсчет точечных мутаций
+                break;
+            //case "PRTM":  answer = MotifDNA(variable); //Расчет массы белка
+            //    break;
         }
         return answer;
     }
 
+    #region Очистка ДНК от мусора
+    private string ClearedDNA (string str)
+    {
+        string chainDNA = "";
+
+        List<char> strDNA = new List<char> { 'A', 'a', 'C', 'c', 'G', 'g', 'T', 't' };
+
+        foreach (var x in str)
+        {
+            if (strDNA.Contains(x)) chainDNA += x;
+        }
+
+        return chainDNA;
+    }
+    private string ClearedDNA(string str, char separator)
+    {
+        string chainDNA = "";
+
+        List<char> strDNA = new List<char> { 'A', 'a', 'C', 'c', 'G', 'g', 'T', 't', separator };
+
+        foreach (var x in str)
+        {
+            if (strDNA.Contains(x)) chainDNA += x;
+        }
+
+        return chainDNA;
+    }
+    #endregion    
+
     #region Подсчет нуклеотидов ДНК
     private string CountingDNA(string per)
-    {       
+    {
 
-        List<char> list = new List<char>(per.ToList());
+        List<char> strDNA = new List<char>(ClearedDNA(per).ToList()); //ClearedDNA(per) это очищенная строка ДНК
 
-        int perA = (from a in list where a == 'A' || a == 'a' select a).Count(); //Кол-во эл-ов
-        int perC = (from c in list where c == 'C' || c == 'c' select c).Count();
-        int perG = (from g in list where g == 'G' || g == 'g' select g).Count();
-        int perT = (from t in list where t == 'T' || t == 't' select t).Count();
+        int perA = (from a in strDNA where a == 'A' || a == 'a' select a).Count(); //Кол-во эл-ов
+        int perC = (from c in strDNA where c == 'C' || c == 'c' select c).Count();
+        int perG = (from g in strDNA where g == 'G' || g == 'g' select g).Count();
+        int perT = (from t in strDNA where t == 'T' || t == 't' select t).Count();
+        
+        message += "Аденин (А): " + perA.ToString() + "\nЦитозин (С): " + perC.ToString() + "\nГуанин (G): " + perG.ToString() + "\nТимин (T): " + perT.ToString() + "\n";
 
+        string notDNA = "";
 
-        message = "Аденин (А): " + perA.ToString() + "\n" + "Цитозин (С): " + perC.ToString() + "\n" + "Гуанин (G): " + perG.ToString() + "\n" + "Тимин (T): " + perT.ToString() + "\n";
+        var nums = per.Except(strDNA); //Вычитаем эл-ы из первой коллекции
+        foreach (var x in nums) notDNA += x + ", ";
 
-        List<char> list2 = new List<char> { 'A', 'a', 'C', 'c', 'G', 'g', 'T', 't'}; 
-
-        var nums = list.Except(list2); //Вычитаем эл-ы из первой коллекции
-
-        string lastPer = "";
-        foreach (char n in nums)
+        if (notDNA != "")
         {
-            lastPer += n + ", ";
-        }
-        if (lastPer != "")
-        {
-            message += "\nЭлементы, которые не учитывались: " + lastPer;
+            message += "\nЭлементы, которые не учитывались: " + notDNA;
+            message = message.Remove(message.Length - 2); //Удаляем последнюю запятую
         }
 
-        list.Clear(); list2.Clear();
+        strDNA.Clear();
+
         return message;
     }
-    #endregion
+    #endregion    
 
     #region Перевод ДНК в РНК
     private string TranscribindDNA(string per)
     {
+        List<char> strDNA = new List<char>(ClearedDNA(per).ToList()); //ClearedDNA(per) это очищенная строка ДНК
 
-        List<char> list = new List<char>(per.ToList());
-        List<char> list2 = new List<char>();
-
-        message = "ДНК цепь: ";
-        foreach (var u in list)
-        {
-            if (u == 'A' || u == 'C' || u == 'G' || u == 'T' || u == 'a' || u == 'c' || u == 'g' || u == 't')
-            {
-                message += u;
-                list2.Add(u);
-            }
-        }
+        message = "ДНК цепь: " + ClearedDNA(per);
 
         message += "\nРНК цепь: ";
-        foreach (var x in list2)
+
+        foreach (var x in strDNA)
         {
             if 
                 (x == 'T')  message += "U";         
@@ -91,19 +111,19 @@ class logic
                 message += x;
         }
 
-        var nums = list.Except(list2); //Вычитаем эл-ы из первой коллекции
+        string notDNA = "";
 
-        string lastPer = "";
-        foreach (char n in nums)
+        var nums = per.Except(strDNA); //Вычитаем эл-ы из первой коллекции
+        foreach (var x in nums) notDNA += x + ", ";
+
+        if (notDNA != "")
         {
-            lastPer += n + ", ";
-        }
-        if (lastPer != "")
-        {
-            message += "\n\nЭлементы, которые не учитывались: " + lastPer;
+            message += "\n\nЭлементы, которые не учитывались: " + notDNA;
+            message = message.Remove(message.Length - 2); //Удаляем последнюю запятую
         }
 
-        list.Clear(); list2.Clear();  //Очищаем коллекции
+        strDNA.Clear();
+
         return message;
     }
     #endregion
@@ -278,6 +298,62 @@ class logic
         else
             message = "Данные не удовлетворяют условию.";
 
+        return message;
+    }
+    #endregion
+
+    #region Подсчет точечных мутаций
+    private string CountMutation(string per)
+    {
+        string DNA = ClearedDNA(per, '/');
+
+        string[] strDNA = DNA.Split(new char[] { '/' });
+
+        try
+        {
+            message = "Строка 1: "+strDNA[0] + "\nСтрока 2: " + strDNA[1];
+
+            if (DNA.IndexOf('/') == DNA.LastIndexOf('/'))
+            {
+                message += "\n\nМутации на ";
+
+                int countMut = 0;
+
+                if (strDNA[0].Length == strDNA[1].Length)
+                {
+                    char[] oneDNA = strDNA[0].ToUpper().ToCharArray();
+                    char[] twoDNA = strDNA[1].ToUpper().ToCharArray();
+
+                    for (int i = 0; i < strDNA[0].Length; i++)
+                    {
+                        if (oneDNA[i] != twoDNA[i])
+                        {
+                            message += i + 1 + ", ";
+                            countMut++;
+                        }
+                    }
+                    if (countMut > 0)
+                    {
+                        message = message.Remove(message.Length - 2);
+                        message += " позиции";
+                        message += "\nКолличество мутаций: " + countMut.ToString();
+                    }
+                    else
+                    {
+                        message = message.Remove(message.Length - 3);
+                        message += "отсутствуют";
+                    }
+                }
+                else
+                    message = "Строки ДНК должны быть равной длины.";
+            }
+            else
+                message = "Данные не удовлетворяют условию. \nВ строке должен быть только один разделитель";
+        }
+        catch(IndexOutOfRangeException)
+        {
+            message = "Данные не удовлетворяют условию. \nВозможно Вы не поставили разделитель '/' ";
+        }
         return message;
     }
     #endregion
