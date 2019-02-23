@@ -27,8 +27,8 @@ class logic
                 break;
             case "HAMM": answer = CountMutation(variable); //Подсчет точечных мутаций
                 break;
-            //case "PRTM":  answer = MotifDNA(variable); //Расчет массы белка
-            //    break;
+            case "PRTM":  answer = ProteinMass(variable); //Расчет массы белка
+                break;
         }
         return answer;
     }
@@ -192,7 +192,7 @@ class logic
 
         string table = File.ReadAllText("RNAintoProtein.txt"); //Тут хранится таблица
 
-        //Тут мы делем переменную от пользователя на группы по три символа
+        //Тут мы делим переменную от пользователя на группы по три символа
         var PerUser = (variable.ToUpper()).Select((c, index) => new { c, index })
             .GroupBy(x => x.index / 3)
             .Select(group => group.Select(elem => elem.c))
@@ -353,6 +353,54 @@ class logic
         catch(IndexOutOfRangeException)
         {
             message = "Данные не удовлетворяют условию. \nВозможно Вы не поставили разделитель '/' ";
+        }
+        return message;
+    }
+    #endregion
+
+    #region Расчет массы белка
+    private string ProteinMass(string per)
+    {
+        string PerUser = ""; 
+        string error = ""; //Для мусора
+        //Оставляем в строке только буквы
+        foreach (var x in per)
+        {
+            if (Char.IsLetter(x)) PerUser += x;
+            else error += x;
+        }
+
+        PerUser = PerUser.ToUpper(); //Переводим все символы в верхний регистр
+        double mass = 0; //Масса белковой строки
+        string table = File.ReadAllText("MonoisotopicMass.txt"); //Тут хранится таблица
+
+        message += "Строка: ";
+        //Тут поиск
+        foreach (var str in PerUser)
+        {
+            int index = table.IndexOf(str);
+            if (index != -1)
+            {
+                message += str;
+                mass += Convert.ToDouble(table.Substring((index + 4), 9));
+            }
+            else
+                error += str;
+        }
+
+        message += "\nМасса белка: " + mass.ToString();
+
+        if (error != "")
+        {
+            message += "\n\nЭлементы, которые не учитывались: ";
+
+            error = new string(error.ToCharArray().Distinct().ToArray());//Удаляем повторяющиеся символы
+            foreach (var x in error)
+            {
+                message += x + ", ";
+            }
+
+            message = message.Substring(0, message.Length - 2); //Удаляем последнюю запятую
         }
         return message;
     }
