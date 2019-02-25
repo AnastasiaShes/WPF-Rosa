@@ -29,6 +29,8 @@ class logic
                 break;
             case "PRTM":  answer = ProteinMass(variable); //Расчет массы белка
                 break;
+            case "CONS": answer = ConsensusProfile(variable); //Консенсус и профиль
+                break;
         }
         return answer;
     }
@@ -388,7 +390,7 @@ class logic
                 error += str;
         }
 
-        message += "\nМасса белка: " + mass.ToString();
+        message += "\nМасса белка: " + mass.ToString() + " Da";
 
         if (error != "")
         {
@@ -401,6 +403,83 @@ class logic
             }
 
             message = message.Substring(0, message.Length - 2); //Удаляем последнюю запятую
+        }
+        return message;
+    }
+    #endregion
+
+    #region Консенсус и профиль
+    private string ConsensusProfile( string per)
+    {
+        string userPer = ClearedDNA(per, '/'); //Убираем эл-ты не из цепи ДНК
+
+        string[] str = userPer.ToLower().Split('/');//Перевод строки в нижний регистр + разбиваем строку на подстроки
+
+        List<int> mass = new List<int>(); //Тут будет строка с кол-вом эл на каждой позиции
+        List<string> сonsensus = new List<string>(); //Тут будет строка с Consensus
+
+        int countSep = (from a in userPer where a == '/' select a).Count(); //Кол-во разделителей
+        int countLen = str[0].Length;//кол-во букв 
+
+        //Ниже мы выводим строки
+        for (int i = 0; i <= countSep; i++)
+        {
+            message += "Строка " + (i + 1) + ": " + str[i].ToUpper() + "\n";
+        }
+
+        //Ниже мы определяем длину каждой строки и если хоть одна не совпадает, то останавливаем решение
+        bool stop = false;
+        for (int g = 1; g < str.Count(); g++)
+        {
+            if (str[0].Length != str[g].Length)
+            {
+                message += "\nДанные не удовлетворяют условию.\nКоличество букв в строках должно совпадать.\nОбратите внимание на " + (g + 1) + " строку";
+                stop = true;
+            }
+        }
+
+        if (stop == false)
+        {
+            int perA, perC, perG, perT;
+
+            for (int x = 0; x < countLen; x++) //буквы
+            {
+                perA = perC = perG = perT = 0;
+
+                for (int y = 0; y <= countSep; y++) //строки
+                {
+                         if (str[y][x] == 'a') { perA++; }
+                    else if (str[y][x] == 'c') { perC++; }
+                    else if (str[y][x] == 'g') { perG++; }
+                    else if (str[y][x] == 't') { perT++; }
+                }
+
+                mass.Add(perA); mass.Add(perC); mass.Add(perG); mass.Add(perT);
+
+                     if (perA > perC && perA > perG && perA > perT) сonsensus.Add("A");
+                else if (perC > perA && perC > perG && perC > perT) сonsensus.Add("C");
+                else if (perG > perA && perG > perC && perG > perT) сonsensus.Add("G");
+                else сonsensus.Add("T");
+
+            }
+
+            string strA = "", strC = "", strG = "", strT = "";
+
+            for (int x = 0; x < mass.Count(); x = x + 4)
+            {
+                strA += mass[x] + " ";
+                strC += mass[x + 1] + " ";
+                strG += mass[x + 2] + " ";
+                strT += mass[x + 3] + " ";
+            }
+
+            message += "\nA: " + strA + "\nC: " + strC + "\nG: " + strG + "\nT: " + strT;
+
+            message += "\n\nКонсенсус: ";
+            foreach(var x in сonsensus)
+            {
+                message += x;
+            }
         }
         return message;
     }
